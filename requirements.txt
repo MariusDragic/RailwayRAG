@@ -1,8 +1,0 @@
-faiss-cpu
-sentence-transformers
-pypdf
-langchain-text-splitters
-python-dotenv
-requests
-rich
-orjson
