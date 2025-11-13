@@ -27,7 +27,10 @@ RAG is a Retrieval-Augmented Generation (RAG) backend designed to answer questio
 │   └── utils.py       # Utility functions
 ├── store/             # Vector DB (faiss.index) and chunks (chunks.json)
 ├── README.md          # This file
-└── requirements.txt   # Python dependencies
+├── pyproject.toml     # Python dependencies (uv)
+├── uv.lock            # Lockfile uv
+├── .gitignore         
+└── .python-version      
 ```
 
 ## Dependencies
@@ -44,7 +47,7 @@ RAG is a Retrieval-Augmented Generation (RAG) backend designed to answer questio
 
 Install all dependencies:
 ```bash
-pip install -r requirements.txt
+uv sync
 ```
 
 ## Usage
