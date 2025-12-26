@@ -1,19 +1,14 @@
-import os
-from pathlib import Path
 from rich import print as rprint
-from rich.progress import Progress, SpinnerColumn, BarColumn, TextColumn, TimeElapsedColumn
+from rich.progress import Progress, SpinnerColumn, TextColumn, TimeElapsedColumn
 from database import RailwayDatabase
 from rag_prompt import build_prompt
 from ollama_client import OllamaClient
 from utils import print_sources
-
-STORE_DIR = Path("store")
-TOP_K = int(os.getenv("TOP_K", "5"))
-EMBEDDER_NAME = "sentence-transformers/all-MiniLM-L6-v2"
+from config import config
 
 def main():
-    db = RailwayDatabase(STORE_DIR, EMBEDDER_NAME)
-    ollama = OllamaClient(model="mistral")
+    db = RailwayDatabase(config)
+    ollama = OllamaClient(config)
     with Progress(
         SpinnerColumn(),
         TextColumn("[progress.description]{task.description}"),
@@ -41,7 +36,7 @@ def main():
             TimeElapsedColumn(),
         ) as progress:
             task = progress.add_task("Recherche dans l'index...", total=None)
-            hits = db.search(query, top_k=TOP_K)
+            hits = db.search(query, top_k=config.database.top_k)
             progress.update(task, completed=1)
             progress.remove_task(task)
 
@@ -53,7 +48,7 @@ def main():
 
             task = progress.add_task("Appel à Mistral (Ollama)...", total=None)
             prompt = build_prompt(query, hits)
-            answer = ollama.chat_completion(prompt, temperature=0.1)
+            answer = ollama.chat_completion(prompt)
             progress.update(task, completed=1)
             progress.remove_task(task)
 

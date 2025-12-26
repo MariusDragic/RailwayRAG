@@ -1,30 +1,29 @@
-import os
 import requests
 from typing import List, Dict, Union
-from dotenv import load_dotenv
 import time
-
-load_dotenv()
+from config import Config
 
 
 class OllamaClient:
-    def __init__(self, endpoint: str = None, model: str = None):
-        self.endpoint = endpoint or os.getenv("OLLAMA_ENDPOINT", "http://localhost:11434")
-        self.model = model or os.getenv("OLLAMA_MODEL", "mistral")
+    def __init__(self, config: Config):
+        self.config = config
 
     def chat_completion(
         self,
         messages: Union[str, List[Dict[str, str]]],
-        temperature: float = 0.2,
+        temperature: float = None,
         keep_alive: str = "5m"
     ) -> str:
         """Appelle le modèle Ollama pour un chat complet."""
         if isinstance(messages, str):
             messages = [{"role": "user", "content": messages}]
+        
+        if temperature is None:
+            temperature = self.config.prompt.ollama_temperature
 
-        url = f"{self.endpoint}/api/chat"
+        url = f"{self.config.prompt.ollama_endpoint}/api/chat"
         payload = {
-            "model": self.model,
+            "model": self.config.prompt.ollama_model,
             "messages": messages,
             "stream": False,
             "keep_alive": keep_alive,

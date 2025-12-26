@@ -24,6 +24,7 @@ RAG is a Retrieval-Augmented Generation (RAG) backend designed to answer questio
 │   ├── ollama_client.py # OllamaClient: handles LLM API calls
 │   ├── rag_prompt.py  # Prompt builder for RAG
 │   ├── scraper.py     # ArxivScraper: downloads railway PDFs
+|   ├── config.py      # RAG parameters config
 │   └── utils.py       # Utility functions
 ├── store/             # Vector DB (faiss.index) and chunks (chunks.json)
 ├── README.md          # This file
